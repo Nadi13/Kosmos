@@ -37,9 +37,9 @@ namespace Tests.TestFraction
         [Test]
         public void TestMulti()
         {
-            var a = new Fraction(1, 2);
-            Assert.AreEqual(true, Fraction.AreEquals(new Fraction(2, 1), Fraction.Multi(4, a)));
-            Assert.AreEqual(false, Fraction.AreEquals(new Fraction(5, 2), Fraction.Multi(-5, a)));
+            var a = new Fraction(1, -2);
+            Assert.AreEqual(true, Fraction.AreEquals(new Fraction(-2, 1), Fraction.Multi(4, a)));
+            Assert.AreEqual(false, Fraction.AreEquals(new Fraction(5, -2), Fraction.Multi(-5, a)));
         }
 
         [Test]
