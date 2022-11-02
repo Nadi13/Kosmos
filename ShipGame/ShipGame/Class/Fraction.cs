@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ShipGame.Class
+﻿namespace ShipGame.Class
 {
     public class Fraction
     {
@@ -60,23 +54,22 @@ namespace ShipGame.Class
 
         public static Fraction Form(Fraction a)
         {
-            int max = 0;
-            if (a.numerator > a.denominator)
+            int n = Math.Abs(a.numerator);
+            int d = Math.Abs(a.denominator);
+            while(n != d)
             {
-                max = Math.Abs(a.denominator);
-            }
-            else
-            {
-                max = Math.Abs(a.numerator);
-            }
-            for (int i = max; i >= 2; i--)
-            {
-                if ((a.numerator % i == 0) & (a.denominator % i == 0))
+                if(n > d)
                 {
-                    a.numerator = a.numerator / i;
-                    a.denominator = a.denominator / i;
+                    n = n - d;
+                }
+                else
+                {
+                    d = d - n;
                 }
             }
+            int nod = d;
+            a.numerator = a.numerator / nod;
+            a.denominator = a.denominator / nod;
             if ((a.denominator < 0))
             {
                 a.numerator = -1 * (a.numerator);
@@ -86,14 +79,7 @@ namespace ShipGame.Class
         }
         public static bool AreEquals(Fraction a, Fraction b)
         {
-            if (a.numerator == b.numerator && a.denominator == b.denominator)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return a.numerator == b.numerator && a.denominator == b.denominator;
         }
 
     }

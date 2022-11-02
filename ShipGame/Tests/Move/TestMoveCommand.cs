@@ -2,11 +2,6 @@
 using Moq;
 using ShipGame.Class;
 using ShipGame.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tests.Move
 {
