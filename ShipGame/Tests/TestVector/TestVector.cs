@@ -1,5 +1,5 @@
 global using NUnit.Framework;
-using ShipGame.Class;
+using ShipGame.Move;
 
 namespace Tests.TestVector
 {

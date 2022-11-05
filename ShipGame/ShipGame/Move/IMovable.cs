@@ -1,6 +1,6 @@
-﻿using ShipGame.Class;
+﻿using ShipGame.Move;
 
-namespace ShipGame.Interface
+namespace ShipGame.Move
 {
     public interface IMovable
     {

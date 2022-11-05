@@ -1,6 +1,6 @@
-﻿using ShipGame.Interface;
+﻿using ShipGame.Move;
 
-namespace ShipGame.Class
+namespace ShipGame.Move
 {
     public class MoveCommand : ICommand
     {

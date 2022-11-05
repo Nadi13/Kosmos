@@ -1,4 +1,4 @@
-﻿namespace ShipGame.Class
+﻿namespace ShipGame.Move
 {
     public class Vector
     {

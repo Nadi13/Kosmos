@@ -1,4 +1,4 @@
-﻿namespace ShipGame.Interface
+﻿namespace ShipGame.Move
 {
     public interface ICommand
     {

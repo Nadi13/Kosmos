@@ -1,7 +1,6 @@
 ﻿global using NUnit.Framework;
 using Moq;
-using ShipGame.Class;
-using ShipGame.Interface;
+using ShipGame.Move;
 
 namespace Tests.Move
 {
