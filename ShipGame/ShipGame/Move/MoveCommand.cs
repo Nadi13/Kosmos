@@ -12,7 +12,7 @@ namespace ShipGame.Move
         }
         public void Execute()
         {
-            movable.Position = Vector.Sum(movable.Position, movable.Velocity);
+            movable.Position = movable.Position + movable.Velocity;
         }
 
 

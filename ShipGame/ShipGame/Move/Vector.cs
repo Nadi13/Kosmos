@@ -25,6 +25,11 @@
             return d;
         }
 
+        public static Vector operator +(Vector a, Vector b)
+        {
+            return Sum(a, b);
+        }
+
         public static bool SameSize(Vector a, Vector b)
         {
             return a.components.Count == b.components.Count;

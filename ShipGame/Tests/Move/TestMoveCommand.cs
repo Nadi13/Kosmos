@@ -14,10 +14,10 @@ namespace Tests.Move
             movable.SetupGet<Vector>(m => m.Velocity).Returns(new Vector(-7, 3));
             ICommand mc = new MoveCommand(movable.Object);
             mc.Execute();
-            Assert.AreEqual(true, Vector.AreEquals(new Vector(5, 8), movable.Object.Position));
+            Assert.That(Vector.AreEquals(new Vector(5, 8), movable.Object.Position), Is.EqualTo(true));
         }
         [Test]
-        public void ExpectionGetPosition()
+        public void ExceptionGetPosition()
         {
             Mock<IMovable> movable = new Mock<IMovable>();
             movable.SetupGet<Vector>(m => m.Position).Throws<Exception>();
@@ -25,7 +25,7 @@ namespace Tests.Move
             Assert.Throws<Exception>(() => mc.Execute());
         }
         [Test]
-        public void ExpectionGetVelocity()
+        public void ExceptionGetVelocity()
         {
             Mock<IMovable> movable = new Mock<IMovable>();
             movable.SetupGet<Vector>(m => m.Velocity).Throws<Exception>();
@@ -33,7 +33,7 @@ namespace Tests.Move
             Assert.Throws<Exception>(() => mc.Execute());
         }
         [Test]
-        public void ExpectionSetPosition()
+        public void ExceptionSetPosition()
         {
             Mock<IMovable> movable = new Mock<IMovable>();
             movable.SetupGet<Vector>(m => m.Position).Returns(new Vector(12, 5));
