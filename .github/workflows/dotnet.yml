@@ -1,8 +1,15 @@
 name: .NET
 
-on:
-  push:
-    branches: [ "main", "move", "rotate"]
+on: 
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'     
+        required: true
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags'  
+
   pull_request:
     branches: [ "main"]
 
@@ -31,10 +38,3 @@ jobs:
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         path-to-lcov: ShipGame/Tests/TestResults/coverage.info
-Footer
-© 2022 GitHub, Inc.
-Footer navigation
-Terms
-Privacy
-Security
-Status

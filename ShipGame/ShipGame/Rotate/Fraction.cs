@@ -24,9 +24,14 @@
                 c.numerator = a.numerator * b.denominator + b.numerator * a.denominator;
                 c.denominator = a.denominator * b.denominator;
             }
-            Fraction.Form(c);
+            Fraction.Reduction(c);
             return c;
         }
+        public static Fraction operator +(Fraction a, Fraction b)
+        {
+            return Sum(a, b);
+        }
+
         public static Fraction Sub(Fraction a, Fraction b)
         {
             var c = new Fraction(1, 1);
@@ -40,19 +45,27 @@
                 c.numerator = a.numerator * b.denominator - b.numerator * a.denominator;
                 c.denominator = a.denominator * b.denominator;
             }
-            Fraction.Form(c);
+            Fraction.Reduction(c);
             return c;
+        }
+        public static Fraction operator -(Fraction a, Fraction b)
+        {
+            return Sub(a, b);
         }
         public static Fraction Multi(int a, Fraction b)
         {
             var c = new Fraction(1, 1);
             c.numerator = a * b.numerator;
             c.denominator = b.denominator;
-            Fraction.Form(c);
+            Fraction.Reduction(c);
             return c;
         }
+        public static Fraction operator *(int a, Fraction b)
+        {
+            return Multi(a, b);
+        }
 
-        public static Fraction Form(Fraction a)
+        public static Fraction Reduction(Fraction a)
         {
             int n = Math.Abs(a.numerator);
             int d = Math.Abs(a.denominator);
@@ -77,6 +90,7 @@
             }
             return (a);
         }
+
         public static bool AreEquals(Fraction a, Fraction b)
         {
             return a.numerator == b.numerator && a.denominator == b.denominator;

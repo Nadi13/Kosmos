@@ -16,11 +16,11 @@ namespace Tests.Rotate
             rotatable.SetupGet<Fraction>(r => r.AngleVelocity).Returns(new Fraction(90, 1));
             ICommand rc = new RotateCommand(rotatable.Object);
             rc.Execute();
-            Assert.AreEqual(true, Fraction.AreEquals(new Fraction(135, 1), rotatable.Object.Angle));
+            Assert.That(Fraction.AreEquals(new Fraction(135, 1), rotatable.Object.Angle), Is.EqualTo(true));
 
         }
         [Test]
-        public void ExpectionGetAngle()
+        public void ExceptionGetAngle()
         {
             Mock<IRotatable> rotatable = new Mock<IRotatable>();
             rotatable.SetupGet<Fraction>(r => r.Angle).Throws<Exception>();
@@ -28,7 +28,7 @@ namespace Tests.Rotate
             Assert.Throws<Exception>(() => rc.Execute());
         }
         [Test]
-        public void ExpectionGetAngleVelocity()
+        public void ExceptionGetAngleVelocity()
         {
             Mock<IRotatable> rotatable = new Mock<IRotatable>();
             rotatable.SetupGet<Fraction>(r => r.AngleVelocity).Throws<Exception>();

@@ -11,7 +11,7 @@ namespace ShipGame.Rotate
         }
         public void Execute()
         {
-            rotatable.Angle = Fraction.Sum(rotatable.Angle, rotatable.AngleVelocity);
+            rotatable.Angle = rotatable.Angle + rotatable.AngleVelocity;
         }
     }
 }
