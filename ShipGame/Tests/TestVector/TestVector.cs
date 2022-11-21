@@ -51,8 +51,8 @@ namespace Tests.TestVector
         [Test]
         public void TestGetHashCode()
         {
-            var a = new Vector(1, 2);
-            Assert.IsInstanceOf<int>(a.GetHashCode());
+            var obj = new Vector(1, 2);
+            Assert.IsInstanceOf<int>(obj.GetHashCode());
         }
     }
 
