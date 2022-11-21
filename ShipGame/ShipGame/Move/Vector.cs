@@ -11,6 +11,17 @@
             }
         }
 
+        public int this[int index]
+        {
+            get
+            {
+                return components[index];
+            }
+            set
+            {
+                this.components[index] = value;
+            }
+        }
         public static Vector Sum(Vector a, Vector b)
         {
             if (!SameSize(a, b))

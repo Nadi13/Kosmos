@@ -6,10 +6,11 @@ namespace Tests.TestVector
     public class Tests
     {
         [Test]
-        public void TestNewVector()
+        public void TestIndex()
         {
-            Vector a = new Vector(1, 2);
-            Assert.NotNull(a);
+            var a = new Vector(1, 2);
+            a[1] += a[0];
+            Assert.True(new Vector(1, 3) == a);
         }
 
         [Test]
