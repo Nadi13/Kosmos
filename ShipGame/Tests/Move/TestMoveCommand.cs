@@ -14,7 +14,7 @@ namespace Tests.Move
             movable.SetupGet<Vector>(m => m.Velocity).Returns(new Vector(-7, 3));
             ICommand mc = new MoveCommand(movable.Object);
             mc.Execute();
-            Assert.That(Vector.AreEquals(new Vector(5, 8), movable.Object.Position), Is.EqualTo(true));
+            Assert.True(new Vector(5, 8) == movable.Object.Position);
         }
         [Test]
         public void ExceptionGetPosition()

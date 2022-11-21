@@ -12,8 +12,8 @@ namespace Tests.TestVector
             var a = new Vector(1, 2, 3, 4, 5);
             var b = new Vector(1, 2, 3);
             var c = new Vector(0, 3, 2, 3, 4);
-            Assert.That(Vector.SameSize(a, c), Is.EqualTo(true));
-            Assert.That(Vector.SameSize(a, b), Is.EqualTo(false));
+            Assert.True(Vector.SameSize(a, c));
+            Assert.False(Vector.SameSize(a, b));
 
         }
 
@@ -24,8 +24,36 @@ namespace Tests.TestVector
             var b = new Vector(1, 2, 5, 5);
             var c = new Vector(2, 4, 8, 10);
             var d = new Vector(1, 2, 3);
-            Assert.That(Vector.AreEquals(c, a + b), Is.EqualTo(true));
+            Assert.True(c == a + b);
             Assert.Throws<ArgumentException>(() => Vector.Sum(c, d));
         }
+
+        [Test]
+        public void TestEquality()
+        {
+            var a = new Vector(1, 2, 3);
+            var b = new Vector(1, 2, 3);
+            var c = new Vector(1, 2, 2);
+            Assert.True(a == b);
+            Assert.False(a == c);
+        }
+
+        [Test]
+        public void TestNoEquality()
+        {
+            var a = new Vector(2, 6);
+            var b = new Vector(2, 6);
+            var c = new Vector(2, 1, 6);
+            Assert.True(a != c);
+            Assert.False(a != b);
+        }
+
+        [Test]
+        public void TestGetHashCode()
+        {
+            var a = new Vector(1, 2);
+            Assert.IsInstanceOf<int>(a.GetHashCode());
+        }
     }
+
 }

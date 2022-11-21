@@ -35,10 +35,21 @@
             return a.components.Count == b.components.Count;
         }
 
-        public static bool AreEquals(Vector a, Vector b)
+        public static bool operator ==(Vector a, Vector b)
         {
             return a.components.SequenceEqual(b.components);
         }
-
+        public static bool operator !=(Vector a, Vector b)
+        {
+            return (a == b) ? false : true;
+        }
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(components);
+        }
+        public override bool Equals(object ? obj)
+        {
+            return obj is Vector;
+        }
     }
 }
