@@ -24,7 +24,6 @@
             }
             return d;
         }
-
         public static Vector operator +(Vector a, Vector b)
         {
             return Sum(a, b);

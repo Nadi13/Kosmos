@@ -5,6 +5,12 @@ namespace Tests.TestVector
 {
     public class Tests
     {
+        [Test]
+        public void TestNewVector()
+        {
+            Vector a = new Vector(1, 2);
+            Assert.NotNull(a);
+        }
 
         [Test]
         public void TestSameSize()
@@ -47,12 +53,11 @@ namespace Tests.TestVector
             Assert.True(a != c);
             Assert.False(a != b);
         }
-
         [Test]
         public void TestGetHashCode()
         {
-            var obj = new Vector(1, 2);
-            Assert.IsInstanceOf<int>(obj.GetHashCode());
+            var a = new Vector(1, 2);
+            Assert.IsInstanceOf<int>(a.GetHashCode());
         }
     }
 
