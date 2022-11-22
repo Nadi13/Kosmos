@@ -6,14 +6,6 @@ namespace Tests.TestVector
     public class Tests
     {
         [Test]
-        public void TestIndex()
-        {
-            var a = new Vector(1, 2);
-            a[1] += a[0];
-            Assert.True(new Vector(1, 3) == a);
-        }
-
-        [Test]
         public void TestSameSize()
         {
             var a = new Vector(1, 2, 3, 4, 5);
@@ -59,6 +51,15 @@ namespace Tests.TestVector
         {
             var a = new Vector(1, 2);
             Assert.IsInstanceOf<int>(a.GetHashCode());
+        }
+        [Test]
+        public void TestEquals()
+        {
+            var a = new Vector(1, 2, 3);
+            int b = 3;
+            var c = new Vector(4, 5, 6);
+            Assert.False(a.Equals(b));
+            Assert.True(a.Equals(c));
         }
     }
 
