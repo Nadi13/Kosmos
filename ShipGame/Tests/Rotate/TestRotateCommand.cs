@@ -16,7 +16,7 @@ namespace Tests.Rotate
             rotatable.SetupGet<Fraction>(r => r.AngleVelocity).Returns(new Fraction(90, 1));
             ICommand rc = new RotateCommand(rotatable.Object);
             rc.Execute();
-            Assert.That(Fraction.AreEquals(new Fraction(135, 1), rotatable.Object.Angle), Is.EqualTo(true));
+            Assert.True(new Fraction(135, 1) == rotatable.Object.Angle);
 
         }
         [Test]
