@@ -1,15 +1,17 @@
 name: .NET
 
-on:
+on: 
   workflow_dispatch:
     inputs:
-      reason:
-        description: 'The reason for running the workflow'
+      logLevel:
+        description: 'Log level'     
         required: true
-        default: 'Manual run'
+        default: 'warning'
+      tags:
+        description: 'Test scenario tags'  
 
-  #pull_request:
-    #branches: [ "main" ]
+  pull_request:
+    branches: [ "main"]
 
 jobs:
   build:
@@ -18,12 +20,9 @@ jobs:
     defaults:
       run:
         working-directory: ShipGame
+
     steps:
     - uses: actions/checkout@v3
-    - name: 'Print manual run reason'
-      if: ${{ github.event_name == 'workflow_dispatch' }}
-      run: |
-        echo 'Reason: ${{ github.event.inputs.reason }}'
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
@@ -34,8 +33,3 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal /p:CollectCoverage=true /p:CoverletOutput=TestResults/ /p:CoverletOutputFormat=lcov
-    - name: Publish coverage report to coveralls.io   
-      uses: coverallsapp/github-action@master   
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        path-to-lcov: ShipGame/Tests/TestResults/coverage.info
