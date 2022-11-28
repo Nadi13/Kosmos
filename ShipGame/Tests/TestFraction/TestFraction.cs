@@ -13,11 +13,14 @@ namespace Tests.TestFraction
             var b = new Fraction(1, 3);
             var c = new Fraction(5, 6);
             var d = new Fraction(2, 6);
+            var f = new Fraction(1, 3);
+            var e = new Fraction(2, 3);
             Assert.True(c == a + b);
             Assert.False(d == a + c);
+            Assert.True(e == b + f);
 
         }
-
+        
         [Test]
         public void TestSub()
         {
@@ -28,7 +31,7 @@ namespace Tests.TestFraction
             Assert.True(d == a - b);
             Assert.False(a == b - c);
         }
-
+        
         [Test]
         public void TestMulti()
         {
@@ -38,7 +41,7 @@ namespace Tests.TestFraction
             Assert.True(b == 4 * a);
             Assert.False(b == -5 * a);
         }
-
+       
         [Test]
         public void TestReduction()
         {
@@ -48,14 +51,15 @@ namespace Tests.TestFraction
             Assert.True(b == Fraction.Reduction(a));
             Assert.False(c == Fraction.Reduction(a));
         }
+        
 
         [Test]
         public void TestEquality()
         {
-            var a = new Fraction(1, 3);
-            var b = new Fraction(1, 3);
+            var a = new Fraction(1, 2);
+            var b = new Fraction(1, 2);
             var c = new Fraction(1, 5);
-            var d = new Fraction(2, 3);
+            var d = new Fraction(3, 2);
             Assert.True(a == b);
             Assert.False(a == c);
             Assert.False(a == d);
