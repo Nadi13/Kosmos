@@ -8,18 +8,17 @@ namespace Tests.TestCollision
 {
     public class TestChekCollision
     {
+        Mock<IStrategy> DecisionStrategy = new Mock<IStrategy>();
+        StrategyDelta DeltaStrategy = new StrategyDelta();
+        StrategyProperties GetPropertyStrategy = new StrategyProperties();
         public TestChekCollision()
         {
             new InitScopeBasedIoCImplementationCommand().Execute();
             IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"))).Execute();
-        }
-        private static void RegisterStrategy(Mock<IStrategy>mock, StrategyDelta a, StrategyProperties b, bool c)
-        {
-            mock.Setup(_strategy => _strategy.RunStrategy(It.IsAny<object[]>())).Returns(c).Verifiable();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "GetProperty", (object[] args) => b.RunStrategy(args)).Execute();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Delta", (object[] args) => a.RunStrategy(args)).Execute();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "DecisionTree", (object[] args) => mock.Object.RunStrategy(args)).Execute();
 
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "GetProperty", (object[] args) => GetPropertyStrategy.RunStrategy(args)).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Delta", (object[] args) => DeltaStrategy.RunStrategy(args)).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "DecisionTree", (object[] args) => DecisionStrategy.Object.RunStrategy(args)).Execute();
         }
 
         private static void GetPropertyVelocity1(Mock<IUObject>mock1, List<int> list)
@@ -49,11 +48,7 @@ namespace Tests.TestCollision
             GetPropertyVelocity2(mock2, new List<int> { 0, 1 });
             GetPropertyPosition2(mock2, new List<int> { 0, 1 });
 
-            var DecisionStrategy = new Mock<IStrategy>();
-            var DeltaStrategy = new StrategyDelta();
-            var GetPropertyStrategy = new StrategyProperties();
-
-            RegisterStrategy(DecisionStrategy, DeltaStrategy, GetPropertyStrategy, true);
+            DecisionStrategy.Setup(_strategy => _strategy.RunStrategy(It.IsAny<object[]>())).Returns(true).Verifiable();
             CheckCollision collision = new CheckCollision(mock1.Object, mock2.Object, 2);
 
             Assert.Throws<Exception>(() => collision.Execute());
@@ -70,11 +65,7 @@ namespace Tests.TestCollision
             GetPropertyVelocity2(mock2, new List<int> { 0, 1 });
             GetPropertyPosition2(mock2, new List<int> { 0, 1 });
 
-            var DecisionStrategy = new Mock<IStrategy>();
-            var DeltaStrategy = new StrategyDelta();
-            var GetPropertyStrategy = new StrategyProperties();
-
-            RegisterStrategy(DecisionStrategy, DeltaStrategy, GetPropertyStrategy, false);
+            DecisionStrategy.Setup(_strategy => _strategy.RunStrategy(It.IsAny<object[]>())).Returns(false).Verifiable();
             CheckCollision collision = new CheckCollision(mock1.Object, mock2.Object, 2);
 
             collision.Execute();
