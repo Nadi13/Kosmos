@@ -13,7 +13,6 @@ namespace ShipGame.Collision
         { 
             get;
         }
-        int Size;
 
         public CheckCollision(IUObject UObj1, IUObject UObj2)
         {
