@@ -49,7 +49,7 @@ namespace Tests.TestCollision
             GetPropertyPosition2(mock2, new List<int> { 0, 1 });
 
             DecisionStrategy.Setup(_strategy => _strategy.RunStrategy(It.IsAny<object[]>())).Returns(true).Verifiable();
-            CheckCollision collision = new CheckCollision(mock1.Object, mock2.Object, 2);
+            CheckCollision collision = new CheckCollision(mock1.Object, mock2.Object);
 
             Assert.Throws<Exception>(() => collision.Execute());
             DecisionStrategy.Verify();
@@ -66,7 +66,7 @@ namespace Tests.TestCollision
             GetPropertyPosition2(mock2, new List<int> { 0, 1 });
 
             DecisionStrategy.Setup(_strategy => _strategy.RunStrategy(It.IsAny<object[]>())).Returns(false).Verifiable();
-            CheckCollision collision = new CheckCollision(mock1.Object, mock2.Object, 2);
+            CheckCollision collision = new CheckCollision(mock1.Object, mock2.Object);
 
             collision.Execute();
             DecisionStrategy.Verify();

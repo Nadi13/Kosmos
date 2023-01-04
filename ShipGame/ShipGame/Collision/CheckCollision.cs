@@ -15,16 +15,15 @@ namespace ShipGame.Collision
         }
         int Size;
 
-        public CheckCollision(IUObject UObj1, IUObject UObj2, int SIZE)
+        public CheckCollision(IUObject UObj1, IUObject UObj2)
         {
             obj1 = UObj1;
             obj2 = UObj2;
-            Size = SIZE;
         }
 
         public void Execute()
         {
-            var list = IoC.Resolve<List<int>>("Delta", obj1, obj2, Size);
+            var list = IoC.Resolve<List<int>>("Delta", obj1, obj2);
             bool collision = IoC.Resolve<bool>("DecisionTree", list);
             if (collision) throw new Exception();
         }
