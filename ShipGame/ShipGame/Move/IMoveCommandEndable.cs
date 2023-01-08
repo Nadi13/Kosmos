@@ -6,7 +6,7 @@
         {
             get;
         } 
-        IUObject Item
+        IUObject ObjMove
         {
             get; 
         }

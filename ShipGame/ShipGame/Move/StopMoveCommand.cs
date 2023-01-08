@@ -11,8 +11,8 @@ namespace ShipGame.Move
         }
         public void Execute()
         {
-            ICommand StopCommand = IoC.Resolve<ICommand>("Empty.Command");
-            IoC.Resolve<ICommand>("Delete.Property", endable.Item).Execute();
+            ICommand StopCommand = IoC.Resolve<ICommand>("Clear.Command");
+            IoC.Resolve<ICommand>("Delete.Property", endable.ObjMove).Execute();
             IoC.Resolve<ICommand>("Insert.Command", endable.Obj, endable.MoveCommand, StopCommand).Execute();
         }
     }
