@@ -22,7 +22,6 @@ namespace Tests.TestLong
         private static void CreateStrategy(Mock<IStrategy> mock1, Mock<ShipGame.Move.ICommand> mock2)
         {
             mock1.Setup(x => x.RunStrategy(It.IsAny<object[]>())).Returns(mock2.Object).Verifiable();
-            mock1.Setup(x => x.RunStrategy(It.IsAny<object[]>())).Returns(mock2.Object).Verifiable();
         }
         [Test]
         public void CreateLongtermCommandStrategyTest()
