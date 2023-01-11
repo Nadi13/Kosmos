@@ -4,7 +4,7 @@ using Moq;
 using ShipGame.longOperation;
 using ShipGame.Move;
 
-namespace Tests.TestMacroCommand
+namespace Tests.TestLong
 {
     public class TestsMacroCommand
     {
@@ -22,13 +22,6 @@ namespace Tests.TestMacroCommand
         private static void CreateStrategy(Mock<IStrategy> mock1, Mock<ShipGame.Move.ICommand> mock2)
         {
             mock1.Setup(x => x.RunStrategy(It.IsAny<object[]>())).Returns(mock2.Object).Verifiable();
-        }
-        private static void PasteStrategy(Mock<IStrategy> mock1, Mock<ShipGame.Move.ICommand> mock2)
-        {
-            mock1.Setup(x => x.RunStrategy(It.IsAny<object[]>())).Returns(mock2.Object).Verifiable();
-        }
-        private static void QueueStrategy(Mock<IStrategy> mock1, Mock<ShipGame.Move.ICommand> mock2)
-        {
             mock1.Setup(x => x.RunStrategy(It.IsAny<object[]>())).Returns(mock2.Object).Verifiable();
         }
         [Test]
@@ -38,8 +31,8 @@ namespace Tests.TestMacroCommand
             mock1.Setup(x => x.Execute());
 
             CreateStrategy(Strategy1, mock1);
-            PasteStrategy(Strategy2, mock1);
-            QueueStrategy(Strategy3, mock1);
+            CreateStrategy(Strategy2, mock1);
+            CreateStrategy(Strategy3, mock1);
 
             var createLongtermCommand = new LongCommandStrategy();
             var mockUObj = new Mock<IUObject>();
