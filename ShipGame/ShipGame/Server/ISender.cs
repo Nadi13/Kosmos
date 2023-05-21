@@ -1,4 +1,4 @@
-﻿using ShipGame.Move;
+﻿using ICommand = ShipGame.Move.ICommand;
 
 namespace ShipGame.Server
 {

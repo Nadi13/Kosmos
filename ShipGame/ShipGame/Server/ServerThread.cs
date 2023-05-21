@@ -1,4 +1,4 @@
-﻿using ShipGame.Move;
+﻿using ICommand = ShipGame.Move.ICommand;
 using Hwdtech;
 
 namespace ShipGame.Server
@@ -34,14 +34,14 @@ namespace ShipGame.Server
         }
         internal void HandleCommand()
         {
-            ShipGame.Move.ICommand cmd = this.queue.Receive();
+            ICommand cmd = this.queue.Receive();
             try
             {
                 cmd.Execute();
             }
             catch (Exception e)
             {
-                var exceptionCommand = IoC.Resolve< ShipGame.Move.ICommand >("HandleException", e, cmd);
+                var exceptionCommand = IoC.Resolve<ICommand >("HandleException", e, cmd);
                 exceptionCommand.Execute();
             }
         }
