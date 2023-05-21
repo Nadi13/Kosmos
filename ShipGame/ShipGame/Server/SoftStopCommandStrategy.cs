@@ -12,7 +12,7 @@ namespace ShipGame.Server
             if (args.Length > 1)
             {
                 Action act1 = (Action)args[1];
-                Action act = new Action(() =>
+                Action newStrategy = new Action(() =>
                 {
                     if (!ST.QueueIsEmpty())
                     {
@@ -24,12 +24,12 @@ namespace ShipGame.Server
                         act1();
                     }
                 });
-                 var softStopCommand = new UpdateBehavior(ST, act);
+                 var softStopCommand = new UpdateBehavior(ST, newStrategy);
                  return softStopCommand;
             }
             else
             {
-                Action act = new Action(() =>
+                Action newStrategy = new Action(() =>
                 {
                     if (!ST.QueueIsEmpty())
                     {
@@ -40,7 +40,7 @@ namespace ShipGame.Server
                         new StopCommand(ST).Execute();
                     }
                 });
-                var softStopCommand = new UpdateBehavior(ST, act);
+                var softStopCommand = new UpdateBehavior(ST, newStrategy);
                 return softStopCommand;
             }
         }
