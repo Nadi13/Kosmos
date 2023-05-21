@@ -28,7 +28,7 @@ namespace ShipGame.Server
         {
             stop = true;
         }
-        public void Execute()
+        public void Start()
         {
             thread.Start();
         }

@@ -9,7 +9,7 @@ namespace SpaceBattle.ServerStrategies
     {
         public object RunStrategy(params object[] args)
         {
-            var senderDict = IoC.Resolve<ConcurrentDictionary<string, ISender>>("ThreadIDSenderMapping");
+            var senderDict = IoC.Resolve<ConcurrentDictionary<string, ISender>>("SenderDictionary");
             var sender = (ISender)args[1];
             senderDict.TryAdd((string)args[0], sender);
             if (args.Length > 3)
@@ -17,8 +17,8 @@ namespace SpaceBattle.ServerStrategies
                 sender.Send(new ActionCommand((Action)args[3]));
             }
             var ST = new ServerThread((IReceiver)args[2]);
-            ST.Execute();
-            var threadDict = IoC.Resolve<ConcurrentDictionary<string, ServerThread>>("ThreadIDMyThreadMapping");
+            ST.Start();
+            var threadDict = IoC.Resolve<ConcurrentDictionary<string, ServerThread>>("ThreadDictionary");
             threadDict.TryAdd((string)args[0], ST);
             return ST;
         }
