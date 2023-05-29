@@ -3,7 +3,7 @@ using Grpc.Core;
 using Hwdtech;
 using ICommand = ShipGame.Move.ICommand;
 
-namespace SpaceBattle.gRPC.Services
+namespace ShipGame.gRPC.Services
 {
     public class EndPointService : EndPoint.EndPointBase
     {
