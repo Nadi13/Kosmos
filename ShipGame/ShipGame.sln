@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShipGame", "ShipGame\ShipGame.csproj", "{BB50C6A6-A578-423C-9117-A6DE08938A72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShipGame", "ShipGame\ShipGame.csproj", "{BB50C6A6-A578-423C-9117-A6DE08938A72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{B090D114-A4AA-4DF5-8A47-6F5B67F2DF11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{B090D114-A4AA-4DF5-8A47-6F5B67F2DF11}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gRPC", "gRPC\gRPC.csproj", "{57D539E0-0C3D-40A2-A395-798A29E783D5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{B090D114-A4AA-4DF5-8A47-6F5B67F2DF11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B090D114-A4AA-4DF5-8A47-6F5B67F2DF11}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B090D114-A4AA-4DF5-8A47-6F5B67F2DF11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57D539E0-0C3D-40A2-A395-798A29E783D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57D539E0-0C3D-40A2-A395-798A29E783D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57D539E0-0C3D-40A2-A395-798A29E783D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57D539E0-0C3D-40A2-A395-798A29E783D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,9 +1,8 @@
-using gRPC;
 using Grpc.Core;
 using Hwdtech;
 using ICommand = ShipGame.Move.ICommand;
 
-namespace ShipGame.gRPC.Services
+namespace gRPC.Services
 {
     public class EndPointService : EndPoint.EndPointBase
     {

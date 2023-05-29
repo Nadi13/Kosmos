@@ -34,5 +34,8 @@
   <ItemGroup>
     <ProjectReference Include="..\ShipGame\ShipGame.csproj" />
   </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\gRPC\gRPC.csproj" />
+	</ItemGroup>
 
 </Project>
