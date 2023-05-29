@@ -32,7 +32,7 @@ namespace Tests.TestgRPC
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "SendCommand", (object[] args) => sendCommandStrategy.RunStrategy(args)).Execute();
 
             var createWithStartStrategy = new CreateWithStartThreadStrategy();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "CreateAll", (object[] args) => createWithStartStrategy.RunStrategy(args)).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "CreateWithStartThread", (object[] args) => createWithStartStrategy.RunStrategy(args)).Execute();
 
             var threadgamedict = new ConcurrentDictionary<string, string>();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Storage.ThreadByGameID", (object[] args) => threadgamedict).Execute();
@@ -52,7 +52,7 @@ namespace Tests.TestgRPC
             var cestrat = new StartEndPointStrategy();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "CreateEndPoint", (object[] args) => cestrat.RunStrategy(args)).Execute();
 
-            var thread1 = IoC.Resolve<ServerThread>("CreateAll", "thread1");
+            var thread1 = IoC.Resolve<ServerThread>("CreateWithStartThread", "thread1");
 
             var games = IoC.Resolve<ConcurrentDictionary<string, string>>("Storage.ThreadByGameID");
             games.TryAdd("game1", "thread1");
