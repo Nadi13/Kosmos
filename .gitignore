@@ -396,3 +396,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+/ShipGame/gRPC/Program.cs
+/ShipGame/gRPC/appsettings.json
+/ShipGame/gRPC/appsettings.Development.json
+/ShipGame/gRPC/Properties/launchSettings.json
