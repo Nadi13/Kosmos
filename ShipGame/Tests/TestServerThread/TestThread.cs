@@ -63,9 +63,11 @@ namespace Tests.TestServerThread
             Assert.NotNull(hardStopCommand);
             var senderTrue = IoC.Resolve<ISender>("SenderAdapterGetByID", "5");
             var mre1 = new ManualResetEvent(false);
-            IoC.Resolve<ShipGame.Move.ICommand>("SendCommand", senderTrue, new ActionCommand(() => { mre1.Set(); })).Execute();
-            var sendCommand = IoC.Resolve<ShipGame.Move.ICommand>("SendCommand", senderTrue, hardStopCommand);
-            sendCommand.Execute();
+            IoC.Resolve<ShipGame.Move.ICommand>("SendCommand", senderTrue, new ActionCommand(() => {
+                hardStopCommand.Execute();
+                mre1.Set();
+            }
+            )).Execute();
             mre1.WaitOne(200);
             Assert.True(th5.QueueIsEmpty());
             Assert.True(th5.GetStop());
@@ -131,6 +133,7 @@ namespace Tests.TestServerThread
             mockCommand1.Verify();
             mockCommand3.Verify();
             mockCommand2.Verify();
+            mre1.WaitOne();
             Assert.True(th6.QueueIsEmpty());
             Assert.True(th6.GetStop());
         }
