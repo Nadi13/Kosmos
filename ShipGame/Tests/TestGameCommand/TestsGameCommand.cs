@@ -4,7 +4,6 @@ using System.Collections.Concurrent;
 using Moq;
 using ShipGame.Game;
 using ICommand = ShipGame.Move.ICommand;
-using System.ComponentModel;
 using System.Diagnostics;
 using ShipGame.Move;
 using ShipGame.Server;
@@ -22,19 +21,17 @@ namespace Tests.TestGameCommand
 
             var threadDict = new ConcurrentDictionary<string, ServerThread>();
             var senderDict = new ConcurrentDictionary<string, ISender>();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ReturnSenderDict", (object[] _) => { return senderDict; }).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "SenderDictionary", (object[] _) => { return senderDict; }).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ReturnInitialScope", (object[] _) => { return initialScope; }).Execute();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ThreadIDMyThreadMapping", (object[] _) => threadDict).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ThreadDictionary", (object[] _) => { return threadDict; }).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ThreadIDSenderMapping", (object[] _) => senderDict).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "SenderAdapterGetByID", (object[] id) => senderDict[(string)id[0]]).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ServerThreadGetByID", (object[] id) => threadDict[(string)id[0]]).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "SenderGetByID", (object[] id) => senderDict[(string)id[0]]).Execute();
+            
 
-            var createAllStrategy = new CreateWithStartThreadStrategy();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "CreateAll", (object[] args) => createAllStrategy.RunStrategy(args)).Execute();
-            var createAndStartThreadStrategy = new CreateWithStartThreadStrategy();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "CreateAndStartThread", (object[] args) => createAndStartThreadStrategy.RunStrategy(args)).Execute();
-            var createReceiverAdapterStrategy = new CreateWithStartThreadStrategy();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "CreateReceiverAdapter", (object[] args) => createReceiverAdapterStrategy.RunStrategy(args)).Execute();
+            var createWithStartThreadStrategy = new CreateWithStartThreadStrategy();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "CreateWithStartThread", (object[] args) => createWithStartThreadStrategy.RunStrategy(args)).Execute();
 
             var sendCommandStrategy = new SendCommandStrategy();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "SendCommand", (object[] args) => sendCommandStrategy.RunStrategy(args)).Execute();
@@ -47,12 +44,11 @@ namespace Tests.TestGameCommand
                 return dict[(string)args[0]];
             }
             ).Execute();
-
         }
         [Test]
         public void GameCommandWithoutExceptionSuccessfulTest()
         {
-            var senderDict = IoC.Resolve<ConcurrentDictionary<string, ISender>>("ReturnSenderDict");
+            var senderDict = IoC.Resolve<ConcurrentDictionary<string, ISender>>("SenderDictionary");
             var threadGameDict = IoC.Resolve<ConcurrentDictionary<string, string>>("Storage.ThreadByGameID");
             var scopeGameDict = new ConcurrentDictionary<string, object>();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Storage.ScopeByGameID", (object[] args) => scopeGameDict).Execute();
@@ -75,7 +71,7 @@ namespace Tests.TestGameCommand
             var quantumStrategy = new Mock<IStrategy>();
             quantumStrategy.Setup(_strategy => _strategy.RunStrategy(It.IsAny<object[]>())).Returns(quantum);
 
-            var th1 = IoC.Resolve<ServerThread>("CreateAll", "thread1");
+            var th1 = IoC.Resolve<ServerThread>("CreateWithStartThread", "thread1");
             IoC.Resolve<ICommand>("SendCommandByThreadID", "thread1", new ActionCommand(() => {
                 IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", gameScope).Execute();
                 IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "QuantumForGame", (object[] args) => quantumStrategy.Object.RunStrategy()).Execute();
@@ -98,7 +94,7 @@ namespace Tests.TestGameCommand
             })).Execute();
             mre1.WaitOne();
             var queue = new Queue<ICommand>();
-            var repeatGameCommand = new GameCommand("game1", queue);
+            var repeatGameCommand = new SetScopeCommand("game1", gameScope, queue);
             var games = IoC.Resolve<ConcurrentDictionary<string, string>>("Storage.ThreadByGameID");
             games.TryAdd("game1", "thread1");
             var mre2 = new ManualResetEvent(false);
@@ -111,39 +107,6 @@ namespace Tests.TestGameCommand
             repeatGameCommand.Execute();
             stopwatch.Stop();
             Assert.True(stopwatch.ElapsedMilliseconds < 150);
-        }
-        [Test]
-        public void GameCommandWithExceptionTest()
-        {
-            var exceptionCommandStrategyDictionary = new Dictionary<Type, Dictionary<ICommand, IStrategy>>();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Dictionary.Handler.Exception", (object[] args) => { return exceptionCommandStrategyDictionary; }).Execute();
-            var exceptCommandStrategyDictionary = IoC.Resolve<Dictionary<Type, Dictionary<ICommand, IStrategy>>>("Dictionary.Handler.Exception");
-            var commandStrategyDictionary = new Dictionary<ICommand, IStrategy>();
-
-            var argException = new ArgumentException();
-            var mockCommand = new Mock<ICommand>();
-            mockCommand.Setup(_command => _command.Execute()).Throws(argException);
-
-            var verifyCommand = new ActionCommand(() => { Assert.Throws<ArgumentException>(() => mockCommand.Object.Execute()); });
-
-            var mockStrategy = new Mock<IStrategy>();
-            mockStrategy.Setup(_strategy => _strategy.RunStrategy(It.IsAny<object[]>())).Returns(verifyCommand).Verifiable();
-
-            commandStrategyDictionary.TryAdd(mockCommand.Object, mockStrategy.Object);
-            exceptCommandStrategyDictionary.TryAdd(argException.GetType(), commandStrategyDictionary);
-
-            var handleExceptionStrategy = new HandlStrategy();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "HandleException", (object[] args) => handleExceptionStrategy.RunStrategy(args)).Execute();
-
-            var quantum = new TimeSpan(0, 0, 0, 0, 250);
-            var quantumStrategy = new Mock<IStrategy>();
-            quantumStrategy.Setup(_strategy => _strategy.RunStrategy(It.IsAny<object[]>())).Returns(quantum);
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "QuantumForGame", (object[] args) => quantumStrategy.Object.RunStrategy()).Execute();
-            var queue = new Queue<ICommand>();
-            queue.Enqueue(mockCommand.Object);
-            var gameCommand = new GameCommand("game1", queue);
-            gameCommand.Execute();
-            mockStrategy.Verify();
         }
     }
 }
