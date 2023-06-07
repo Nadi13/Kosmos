@@ -92,6 +92,7 @@ namespace Tests.TestGameCommand
             var gameCommand = new GameCommand("game1", queue);
             Assert.Throws<Exception>(()=>gameCommand.Execute());
         }
+
         [Test]
         public void GameCommandWithExceptionWithoutFindAnotherTest()
         {
