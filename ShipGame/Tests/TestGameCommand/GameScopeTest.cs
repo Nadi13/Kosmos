@@ -98,16 +98,16 @@ namespace Tests.TestGameCommand
             var exceptCommandStrategyDictionary = IoC.Resolve<Dictionary<Type, Dictionary<ICommand, IStrategy>>>("Dictionary.Handler.Exception");
             var commandStrategyDictionary = new Dictionary<ICommand, IStrategy>();
 
-            var argException = new ArgumentException();
+            var Exception1 = new Exception();
             var mockCommand = new Mock<ICommand>();
-            mockCommand.Setup(_command => _command.Execute()).Throws(argException);
+            mockCommand.Setup(_command => _command.Execute()).Throws(Exception1);
 
-            var verifyCommand = new ActionCommand(() => { Assert.Throws<ArgumentException>(() => mockCommand.Object.Execute()); });
+            var verifyCommand = new ActionCommand(() => { Assert.Throws<Exception>(() => mockCommand.Object.Execute()); });
 
             var mockStrategy = new Mock<IStrategy>();
             mockStrategy.Setup(_strategy => _strategy.RunStrategy(It.IsAny<object[]>())).Returns(verifyCommand).Verifiable();
 
-            exceptCommandStrategyDictionary.TryAdd(argException.GetType(), commandStrategyDictionary);
+            exceptCommandStrategyDictionary.TryAdd(Exception1.GetType(), commandStrategyDictionary);
 
             var queue = new Queue<ICommand>();
             queue.Enqueue(mockCommand.Object);
