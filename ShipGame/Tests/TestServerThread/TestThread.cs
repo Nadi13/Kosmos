@@ -129,11 +129,13 @@ namespace Tests.TestServerThread
             IoC.Resolve<ShipGame.Move.ICommand>("SendCommand", sender, mockCommand6.Object).Execute();
             IoC.Resolve<ShipGame.Move.ICommand>("SendCommand", sender, new ActionCommand(() => { mre1.Set(); })).Execute();
             Assert.False(th6.QueueIsEmpty());
-            mre1.WaitOne(200);
             mockCommand1.Verify();
             mockCommand3.Verify();
             mockCommand2.Verify();
             mre1.WaitOne();
+            mockCommand4.Verify();
+            mockCommand5.Verify();
+            mockCommand6.Verify();
             Assert.True(th6.QueueIsEmpty());
             Assert.True(th6.GetStop());
         }
