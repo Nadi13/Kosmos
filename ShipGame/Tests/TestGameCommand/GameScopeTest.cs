@@ -72,5 +72,25 @@ namespace Tests.TestGameCommand
             gameCommand.Execute();
             mockStrategy.Verify();
         }
+        [Test]
+        public void GameCommandWithExceptionWithoutFindTest()
+        {
+            var exceptCommandStrategyDictionary = IoC.Resolve<Dictionary<Type, Dictionary<ICommand, IStrategy>>>("Dictionary.Handler.Exception");
+            var commandStrategyDictionary = new Dictionary<ICommand, IStrategy>();
+
+            var argException = new ArgumentException();
+            var mockCommand = new Mock<ICommand>();
+            mockCommand.Setup(_command => _command.Execute()).Throws(argException);
+
+            var verifyCommand = new ActionCommand(() => { Assert.Throws<ArgumentException>(() => mockCommand.Object.Execute()); });
+
+            var mockStrategy = new Mock<IStrategy>();
+            mockStrategy.Setup(_strategy => _strategy.RunStrategy(It.IsAny<object[]>())).Returns(verifyCommand).Verifiable();
+
+            var queue = new Queue<ICommand>();
+            queue.Enqueue(mockCommand.Object);
+            var gameCommand = new GameCommand("game1", queue);
+            Assert.Throws<Exception>(()=>gameCommand.Execute());
+        }
     }
 }
