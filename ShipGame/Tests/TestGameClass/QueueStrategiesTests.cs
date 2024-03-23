@@ -6,6 +6,8 @@ using ShipGame.Move;
 using ShipGame.Server;
 using ICommand = ShipGame.Move.ICommand;
 
+
+
 namespace Tests.TestGameClass;
 public class QueueStrategiesTests
 {
@@ -65,6 +67,6 @@ public class QueueStrategiesTests
         IoC.Resolve<ICommand>("QueueEnqueue", queue, cmd.Object).Execute();
 
         var cmd1 = IoC.Resolve<ICommand>("QueueDequeue", queue);
-        Assert.Equal(cmd.Object, cmd1);
+        Assert.True(cmd.Object == cmd1);
     }
 }

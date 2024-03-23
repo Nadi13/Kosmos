@@ -95,7 +95,7 @@ public class ScopeTests
         ICommand gameCommand = IoC.Resolve<ICommand>("Game.CreateNew", 500);
         gameCommand.Execute();
 
-        Assert.Equal(500, IoC.Resolve<int>("GetQuantum"));
+        Assert.True(500 == IoC.Resolve<int>("GetQuantum"));
         Assert.True(IoC.Resolve<Dictionary<string, IUObject>>("General.Objects").Count() == 0);
         Assert.Throws<Exception>(
             () =>

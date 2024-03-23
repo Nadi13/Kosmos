@@ -5,6 +5,7 @@ using Moq;
 using ShipGame.Move;
 using ShipGame.Server;
 using ICommand = ShipGame.Move.ICommand;
+using SpaceBattle.ServerStrategies;
 
 namespace Tests.TestGameClass;
 public class GameObjectsTests
@@ -35,7 +36,7 @@ public class GameObjectsTests
 
         var resolvedObj = IoC.Resolve<IUObject>("General.GetItem", "0");
 
-        Assert.Equal(mockObj.Object, resolvedObj);
+        Assert.True(mockObj.Object == resolvedObj);
     }
     [Test]
     public void removeItemTest()
