@@ -65,6 +65,6 @@ public class QueueStrategiesTests
         IoC.Resolve<ICommand>("QueueEnqueue", queue, cmd.Object).Execute();
 
         var cmd1 = IoC.Resolve<ICommand>("QueueDequeue", queue);
-        Assert.AreEqual(cmd.Object, cmd1);
+        Assert.Equal(cmd.Object, cmd1);
     }
 }

@@ -35,7 +35,7 @@ public class GameObjectsTests
 
         var resolvedObj = IoC.Resolve<IUObject>("General.GetItem", "0");
 
-        Assert.AreEqual(mockObj.Object, resolvedObj);
+        Assert.Equal(mockObj.Object, resolvedObj);
     }
     [Test]
     public void removeItemTest()
