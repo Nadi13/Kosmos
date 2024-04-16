@@ -9,7 +9,7 @@ public class SetFuel : IStrategy
     public object RunStrategy(params object[] args)
     {
         IUObject obj = (IUObject) args[0];
-        obj.SetProperty("fuel", Convert.ToDouble(args[1]));
-        return new object();
+        double fuel = Convert.ToDouble(args[1]);
+        return new SetFuelCommand(obj, fuel);
     }
 }

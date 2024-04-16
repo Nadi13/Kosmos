@@ -51,6 +51,7 @@ public class GameInitTests
         Dictionary<string, object> initProps = new Dictionary<string, object>
         {
             ["numberOfPlayers"] = 2,
+            ["shipsPerPlayer"] = 4          
         };
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "Game.InitProperties", (Func<object[], Dictionary<string, object>>) (args => initProps)).Execute();
         IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "General.AddNewPlayer", (Func<object[], string>) (args => Convert.ToString(playerid++))).Execute();
@@ -63,7 +64,8 @@ public class GameInitTests
     public void setFuelTest()
     {
         TestObject obj = new TestObject(new Dictionary<string, object>());
-        new SetFuel().RunStrategy(obj, 10);
+        SetFuelCommand setFuel = (SetFuelCommand) new SetFuel().RunStrategy(obj, 10);
+        setFuel.Execute();
         Assert.True((double) obj.GetProperty("fuel") == 10);
     }
     [Test]
@@ -71,13 +73,16 @@ public class GameInitTests
     {
         var gameObjects = IoC.Resolve<Dictionary<string, IUObject>>("General.Objects");
         new CreateEmptyShips().RunStrategy();
-        Assert.True(gameObjects.Count() == 6);
+        Assert.True(gameObjects.Count() == 8);
         Assert.True((string) gameObjects["0"].GetProperty("player") == "0");
         Assert.True((string) gameObjects["1"].GetProperty("player") == "0");
         Assert.True((string) gameObjects["2"].GetProperty("player") == "0");
-        Assert.True((string) gameObjects["3"].GetProperty("player") == "1");
+        Assert.True((string) gameObjects["3"].GetProperty("player") == "0");
         Assert.True((string) gameObjects["4"].GetProperty("player") == "1");
         Assert.True((string) gameObjects["5"].GetProperty("player") == "1");
+        Assert.True((string) gameObjects["6"].GetProperty("player") == "1");
+        Assert.True((string) gameObjects["7"].GetProperty("player") == "1");
+
     }
     [Test]
     public void placeObjectsTests()
@@ -88,22 +93,29 @@ public class GameInitTests
             IoC.Resolve<IUObject>("General.GetItem", "0"),
             IoC.Resolve<IUObject>("General.GetItem", "1"),
             IoC.Resolve<IUObject>("General.GetItem", "2"),
+            IoC.Resolve<IUObject>("General.GetItem", "3"),
+
         };
-        new PlaceObjects().RunStrategy(friendlyShips, "Placements.Vertical", 10, 5);
+        new PlaceObjects().RunStrategy("Placements.Vertical", friendlyShips, 10, 5, 0);
         Assert.True((Vector) gameObjects["0"].GetProperty("position") == new Vector(5, 0));
         Assert.True((Vector) gameObjects["1"].GetProperty("position") == new Vector(5, 10));
         Assert.True((Vector) gameObjects["2"].GetProperty("position") == new Vector(5, 20));
+        Assert.True((Vector) gameObjects["3"].GetProperty("position") == new Vector(5, 30));
 
-        var enemyShips = new IUObject[] {
-            IoC.Resolve<IUObject>("General.GetItem", "3"),
+
+        var enemyShips_l = new IUObject[] {
             IoC.Resolve<IUObject>("General.GetItem", "4"),
             IoC.Resolve<IUObject>("General.GetItem", "5"),
         };
-        new PlaceObjects().RunStrategy(enemyShips, "Placements.PairLike", 15, 5, -5);
-        Assert.True((Vector) gameObjects["3"].GetProperty("position") == new Vector(-5, 0));
-        Assert.True((Vector) gameObjects["4"].GetProperty("position") == new Vector(0, 0));
+        var enemyShips_r = new IUObject[] {
+            IoC.Resolve<IUObject>("General.GetItem", "6"),
+            IoC.Resolve<IUObject>("General.GetItem", "7"),
+        };
+        new PlaceObjects().RunStrategy("Placements.PairLike", enemyShips_l, enemyShips_r, 15, 5, -5, 0);
+        Assert.True((Vector) gameObjects["4"].GetProperty("position") == new Vector(-5, 0));
         Assert.True((Vector) gameObjects["5"].GetProperty("position") == new Vector(-5, 15));
+        Assert.True((Vector) gameObjects["6"].GetProperty("position") == new Vector(0, 0));
+        Assert.True((Vector) gameObjects["7"].GetProperty("position") == new Vector(0, 15));
 
-        new CreateEmptyShips().RunStrategy();
     }
 }
