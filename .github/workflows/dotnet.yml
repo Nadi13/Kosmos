@@ -32,12 +32,9 @@ jobs:
 
     - name: Test
       run: dotnet test ./Tests/ --collect:"XPlat Code Coverage" --settings ./coverlet.runsettings --results-directory ./coverage
-
-    - name: Print XML content
-      run: cat ./coverage/**/*.cobertura.xml
-
+      
     - name: Code Coverage Report
-      uses: irongut/CodeCoverageSummary@v1.3.0
+      uses: irongut/CodeCoverageSummary@vX.Y.Z
       with:
         filename: ./coverage/**/*.cobertura.xml
         badge: true
