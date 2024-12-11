@@ -45,8 +45,8 @@ jobs:
         echo "" >> code-coverage-results.md
         echo "Coverage Report:" >> code-coverage-results.md
         echo "" >> code-coverage-results.md
-        reportgenerator -reports:./Tests/coverage/report/coverage.cobertura.xml -targetdir:./Tests/coverage/report/html -reporttypes:Html
-        echo "Coverage report generated at ./Tests/coverage/report/html/index.html"
+        reportgenerator -reports:./Tests/coverage/**/coverage.cobertura.xml -targetdir:./Tests/coverage/**/html -reporttypes:Html
+        echo "Coverage report generated at ./Tests/coverage/**/html/index.html"
 
     - name: Add Coverage PR Comment
       uses: marocchino/sticky-pull-request-comment@v2
