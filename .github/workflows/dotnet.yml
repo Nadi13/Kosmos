@@ -1,44 +1,42 @@
-name: .NET
+name: .Net 6 CI Build
 
-on: 
-  workflow_dispatch:
-    inputs:
-      logLevel:
-        description: 'Log level'     
-        required: true
-        default: 'warning'
-      tags:
-        description: 'Test scenario tags'  
-
+on:
+  push:
+    branches: [ main ]
   pull_request:
-    branches: [ "main"]
+    branches: [ main ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    name: CI Build
     defaults:
       run:
         working-directory: ShipGame
-
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v2
+
     - name: Setup .NET
-      uses: actions/setup-dotnet@v3
+      uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
-    - name: Restore dependencies
+
+    - name: Restore Dependencies
       run: dotnet restore
+
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --configuration Release --no-restore
+
     - name: Test
-      run: dotnet test --no-build --collect:"XPlat Code Coverage;Format=opencover" --verbosity normal
-    - name: Find coverage file
-      run: find Tests/TestResults -name "*.xml" -exec mv {} Tests/TestResults/coverage.opencover.xml \;
+      run: dotnet test ./Tests/ --collect:"XPlat Code Coverage" --settings ./coverlet.runsettings --results-directory ./coverage
+
     - name: Code Coverage Report
       uses: irongut/CodeCoverageSummary@v1.3.0
       with:
-        filename: ./Tests/TestResults/coverage.opencover.xml
+        filename: ./coverage/*/coverage.cobertura.xml
         badge: true
         fail_below_min: true
         format: markdown
