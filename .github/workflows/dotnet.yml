@@ -39,7 +39,7 @@ jobs:
     - name: Code Coverage Report
       uses: irongut/CodeCoverageSummary@v1.3.0
       with:
-        filename: ./coverage/**/*.opencover.xml
+        filename: './coverage/5a3983fe-17f3-428d-af1d-f5cc5cbdd9b2/coverage.opencover.xml'
         badge: true
         format: 'markdown'
         output: 'both'
