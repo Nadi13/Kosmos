@@ -35,9 +35,9 @@ jobs:
 
     - name: Generate Code Coverage Report
       run: |
-        mkdir -p ./Tests/coverage/report
+        mkdir -p ./Tests/coverage/**/
         dotnet tool install --global coverlet.console
-        coverlet ./Tests/bin/Release/net6.0/Tests.dll --target 'dotnet' --targetargs 'test --no-build --verbosity normal' --format cobertura --output ./Tests/coverage/report/coverage.cobertura.xml
+        coverlet ./Tests/bin/Release/net6.0/Tests.dll --target 'dotnet' --targetargs 'test --no-build --verbosity normal' --format cobertura --output ./Tests/coverage/**/coverage.cobertura.xml
 
     - name: Code Coverage Summary
       run: |
