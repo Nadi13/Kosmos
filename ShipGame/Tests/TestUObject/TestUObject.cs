@@ -1,6 +1,5 @@
 using Hwdtech;
 using Hwdtech.Ioc;
-using Moq;
 using ShipGame.Server;
 
 namespace Tests
