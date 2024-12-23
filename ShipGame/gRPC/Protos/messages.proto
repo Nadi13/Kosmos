@@ -7,8 +7,9 @@ package server;
 service EndPoint
 {
   rpc Message(CommandRequest) returns (CommandResponse);
-  rpc Order(stream OrderRequest) returns (stream OrderReply)
+  rpc Order(stream OrderRequest) returns (stream OrderReply);
 }
+
 message CommandForObject
 {
 	string Key = 1;
