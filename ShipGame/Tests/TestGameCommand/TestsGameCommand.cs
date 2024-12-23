@@ -21,9 +21,11 @@ namespace Tests.TestGameCommand
 
             var threadDict = new ConcurrentDictionary<string, ServerThread>();
             var senderDict = new ConcurrentDictionary<string, ISender>();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "SenderDictionary", (object[] _) => { return senderDict; }).Execute();
+            var senderOrderDict = new ConcurrentDictionary<string, ISender>();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ThreadDictionary", (object[] _) => threadDict).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "SenderDictionary", (object[] _) => senderDict).Execute();
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "SenderOrderDictionary", (object[] _) => senderOrderDict).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ReturnInitialScope", (object[] _) => { return initialScope; }).Execute();
-            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ThreadDictionary", (object[] _) => { return threadDict; }).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ThreadIDSenderMapping", (object[] _) => senderDict).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "SenderAdapterGetByID", (object[] id) => senderDict[(string)id[0]]).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ServerThreadGetByID", (object[] id) => threadDict[(string)id[0]]).Execute();

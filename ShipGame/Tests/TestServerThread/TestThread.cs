@@ -19,8 +19,10 @@ namespace Tests.TestServerThread
 
             var threadDict = new ConcurrentDictionary<string, ServerThread>();
             var senderDict = new ConcurrentDictionary<string, ISender>();
+            var senderOrderDict = new ConcurrentDictionary<string, ISender>();
             IoC.Resolve<ICommand>("IoC.Register", "ThreadDictionary", (object[] _) => threadDict).Execute();
             IoC.Resolve<ICommand>("IoC.Register", "SenderDictionary", (object[] _) => senderDict).Execute();
+            IoC.Resolve<ICommand>("IoC.Register", "SenderOrderDictionary", (object[] _) => senderOrderDict).Execute();
             IoC.Resolve<ICommand>("IoC.Register", "SenderAdapterGetByID", (object[] id) => senderDict[(string)id[0]]).Execute();
             IoC.Resolve<ICommand>("IoC.Register", "ServerThreadGetByID", (object[] id) => threadDict[(string)id[0]]).Execute();
 
