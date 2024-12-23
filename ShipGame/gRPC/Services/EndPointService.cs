@@ -3,6 +3,7 @@ using Grpc.Core;
 using Hwdtech;
 using ICommand = ShipGame.Move.ICommand;
 
+
 namespace gRPC.Services
 {
     public class EndPointService : EndPoint.EndPointBase
@@ -28,11 +29,19 @@ namespace gRPC.Services
         }
         public override async Task<OrderReply> Order(IAsyncStreamReader<OrderRequest> requestStream, IServerStreamWriter<OrderReply> responseStream, ServerCallContext context)
         {
-           await foreach (var message in requestStream.ReadAllAsync())
-            {
-                bool isRouted = _router.route(message);
-                await responseStream.WriteAsync(new OrderReply(){Status = isRouted});
+            _logger.LogInformation("Start processing Order stream");
+            try{
+                await foreach (var message in requestStream.ReadAllAsync())
+                {
+                    bool isRouted = _router.route(message);
+                    await responseStream.WriteAsync(new OrderReply(){Status = isRouted});
+                }
             }
+            catch (Exception ex){
+                _logger.LogError(ex, "Error processing Order stream");
+            }
+            
+            _logger.LogInformation("End processing Order stream");
             return new OrderReply();
         }
     }
