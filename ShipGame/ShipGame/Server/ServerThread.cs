@@ -7,11 +7,13 @@ namespace ShipGame.Server
     {
         internal bool stop = false;
         private IReceiver queue;
+        private IReceiver orderQueue;
         private Thread thread;
         private Action strategy;
-        public ServerThread(IReceiver queue)
+        public ServerThread(IReceiver queue, IReceiver orderQueue)
         {
             this.queue = queue;
+            this.orderQueue = orderQueue;
             strategy = new Action(() =>
             {
                 HandleCommand();
@@ -34,16 +36,12 @@ namespace ShipGame.Server
         }
         internal void HandleCommand()
         {
-            ICommand cmd = this.queue.Receive();
-            try
-            {
-                cmd.Execute();
+             if (!orderQueue.IsEmpty()){
+                ICommand order = orderQueue.Receive();
+                tryExecute(order);
             }
-            catch (Exception e)
-            {
-                var exceptionCommand = IoC.Resolve<ICommand >("HandleException", e, cmd);
-                exceptionCommand.Execute();
-            }
+            ICommand cmd = queue.Receive();
+            tryExecute(cmd);
         }
         public void UpdateBehavior(Action newBeh)
         {
@@ -60,6 +58,18 @@ namespace ShipGame.Server
         public bool Equals(Thread thread)
         {
             return this.thread == thread;
+        }
+        internal void tryExecute(ICommand command)
+        {
+            try
+            {
+                command.Execute();
+            }
+            catch(Exception e)
+            {
+                var exceptionCommand = IoC.Resolve<ICommand>("HandleException", e, command);
+                exceptionCommand.Execute();
+            }
         }
     }
 }
