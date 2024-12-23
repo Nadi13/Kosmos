@@ -1,3 +1,4 @@
+using gRPC.EndPointRouter;
 using Grpc.Core;
 using Hwdtech;
 using ICommand = ShipGame.Move.ICommand;
@@ -7,9 +8,11 @@ namespace gRPC.Services
     public class EndPointService : EndPoint.EndPointBase
     {
         private readonly ILogger<EndPointService> _logger;
-        public EndPointService(ILogger<EndPointService> logger)
+        private IEndPointRouter _router;
+        public EndPointService(ILogger<EndPointService> logger, IEndPointRouter endPointRouter)
         {
             _logger = logger;
+            _router = endPointRouter;
         }
 
         public override Task<CommandResponse> Message(CommandRequest request, ServerCallContext context)
@@ -22,6 +25,15 @@ namespace gRPC.Services
             {
                 Status = 202
             });
+        }
+        public override async Task<OrderReply> Order(IAsyncStreamReader<OrderRequest> requestStream, IServerStreamWriter<OrderReply> responseStream, ServerCallContext context)
+        {
+           await foreach (var message in requestStream.ReadAllAsync())
+            {
+                bool isRouted = _router.route(message);
+                await responseStream.WriteAsync(new OrderReply(){Status = isRouted});
+            }
+            return new OrderReply();
         }
     }
 }

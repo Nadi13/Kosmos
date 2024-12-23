@@ -11,6 +11,7 @@ using gRPC.Services;
 using gRPC.StartEndPointService;
 using ShipGame.Server;
 using SpaceBattle.ServerStrategies;
+using gRPC.EndPointRouter;
 
 namespace Tests.TestgRPC
 {
@@ -72,7 +73,7 @@ namespace Tests.TestgRPC
             var mre1 = new ManualResetEvent(false);
             var sender = IoC.Resolve<ISender>("SenderGetByID", "thread1");
             var endp = IoC.Resolve<ICommand>("CreateEndPoint");
-            var service = new EndPointService(new Mock<ILogger<EndPointService>>().Object);
+            var service = new EndPointService(new Mock<ILogger<EndPointService>>().Object, new Mock<IEndPointRouter>().Object);
             service.Message(request, new Mock<ServerCallContext>().Object);
             IoC.Resolve<ICommand>("SendCommand", sender, new ActionCommand(() => { mre1.Set(); })).Execute();
             mre1.WaitOne();
