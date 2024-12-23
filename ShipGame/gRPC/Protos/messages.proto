@@ -7,6 +7,7 @@ package server;
 service EndPoint
 {
   rpc Message(CommandRequest) returns (CommandResponse);
+  rpc Order(stream OrderRequest) returns (stream OrderReply)
 }
 message CommandForObject
 {
@@ -25,4 +26,13 @@ message CommandRequest
 message CommandResponse 
 {
   int32 status = 1;
+}
+
+message OrderReply {
+  bool status = 1;
+}
+
+message OrderRequest {
+  string GameId = 1;
+  map<string, string> map = 2;
 }
