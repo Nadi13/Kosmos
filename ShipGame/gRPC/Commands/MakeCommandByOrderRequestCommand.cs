@@ -16,8 +16,8 @@ class MakeCommandByOrderRequestCommand : ICommand
     }
     public void Execute()
     {
-        Dictionary<string,string> orderProperties = IoC.Resolve<Dictionary<string,string>>("ProtobufMapToDictionary", _orderMap);
+        Dictionary<string,string> orderProperties = _orderMap.ToDictionary(x => x.Key, x => x.Value);
         ICommand command = IoC.Resolve<ICommand>("OrderDictionaryToICommand", orderProperties);
-        IoC.Resolve<IStrategy>("SendCommandToGame", _gameId, command).RunStrategy();
+        IoC.Resolve<ICommand>("SendCommandToGame", _gameId, command).Execute();
     }
 }

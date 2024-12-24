@@ -2,8 +2,6 @@ using System.Collections.Concurrent;
 using gRPC.EndPointRouter;
 using gRPC.Router;
 using gRPC.Services;
-using gRPC.Strategies;
-using Microsoft.Extensions.Logging.Console;
 using ShipGame.Game;
 using ShipGame.Server;
 using SpaceBattle.ServerStrategies;
@@ -31,13 +29,15 @@ Hwdtech.IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "SenderOrderDictionary", (
 var createWithStartThreadStrategy = new CreateWithStartThreadStrategy();
 Hwdtech.IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "CreateWithStartThread", (object[] args) => createWithStartThreadStrategy.RunStrategy(args)).Execute();
 Hwdtech.IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "QuantumForGame", (object[] _) => (object)new TimeSpan(0, 0, 0, 40, 0)).Execute();
-var protobufMapToDictionaryStrategy = new ProtobufMapToDictionaryStrategy();
-Hwdtech.IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ProtobufMapToDictionary", (object[] args) => protobufMapToDictionaryStrategy.RunStrategy(args)).Execute();
 ICommand emptyCommand = new ActionCommand(()=>{});
-Hwdtech.IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "OrderDictionaryToICommand", (object[] args) => emptyCommand).Execute();
-Hwdtech.IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "SendCommandToGame", (object[] args) => gamesDictionary[(string)args[0]].Append((ICommand)args[1])).Execute();
 
-var th1 = Hwdtech.IoC.Resolve<ServerThread>("CreateWithStartThread", "80");
+Action act1 = () => {
+    Hwdtech.IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", Hwdtech.IoC.Resolve<object>("Scopes.New", Hwdtech.IoC.Resolve<object>("Scopes.Root"))).Execute();
+    Hwdtech.IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "OrderDictionaryToICommand", (object[] args) => emptyCommand).Execute();
+    Hwdtech.IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "SendCommandToGame", (object[] args) => new ActionCommand(()=>gamesDictionary[(string)args[0]].Append((ICommand)args[1]))).Execute();
+};
+
+var th1 = Hwdtech.IoC.Resolve<ServerThread>("CreateWithStartThread", "80", act1);
 IEndPointRouter router = new EndPointRouter(gamesThreadsDictionary, senderOrderDict);
 var logger = new LoggerFactory().CreateLogger<EndPointService>();
 EndPointService endpoint = new EndPointService(logger, router);

@@ -25,9 +25,10 @@ namespace SpaceBattle.ServerStrategies
             var receiver = new ReceiverAdapter(queue);
             var receiver2 = new ReceiverAdapter(ords);
             var ST = new ServerThread(receiver, receiver2);
-            ST.Start();
             senderDict.TryAdd((string)args[0], sender);
             threadDict.TryAdd((string)args[0], ST);
+            senderOrderDict.TryAdd((string)args[0], sender2);
+            ST.Start();
             return ST;
         }
     }

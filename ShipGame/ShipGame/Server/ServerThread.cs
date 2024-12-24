@@ -36,12 +36,14 @@ namespace ShipGame.Server
         }
         internal void HandleCommand()
         {
-             if (!orderQueue.IsEmpty()){
+            if (!orderQueue.IsEmpty()){
                 ICommand order = orderQueue.Receive();
                 tryExecute(order);
             }
-            ICommand cmd = queue.Receive();
-            tryExecute(cmd);
+            if (!queue.IsEmpty()){
+                ICommand cmd = queue.Receive();
+                tryExecute(cmd);
+            }
         }
         public void UpdateBehavior(Action newBeh)
         {
