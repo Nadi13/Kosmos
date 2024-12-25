@@ -10,6 +10,7 @@ namespace gRPC.Router
     {
         ConcurrentDictionary<string, string> _threadIdByGameIdDictionary;
         ConcurrentDictionary<string, ISender> _senderByThreadIdDictionary;
+        Random random = new Random();
         public EndPointRouter(ConcurrentDictionary<string, string> threadIdByGameIdDictionary, ConcurrentDictionary<string, ISender> senderByThreadIdDictionary){
             _threadIdByGameIdDictionary = threadIdByGameIdDictionary;
             _senderByThreadIdDictionary = senderByThreadIdDictionary;
@@ -22,6 +23,33 @@ namespace gRPC.Router
                 ISender sender = _senderByThreadIdDictionary[threadId];
                 ICommand command = new MakeCommandByOrderRequestCommand(orderRequest);
                 sender.Send(command);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+         public bool routeAcceptCommand(string serializedGame)
+        {
+            try
+            {
+                string threadId = _threadIdByGameIdDictionary.ElementAt(random.Next(0, _threadIdByGameIdDictionary.Count)).Value;
+                ISender sender = _senderByThreadIdDictionary[threadId];
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public bool routeMigrateCommand(string serverId, string gameId)
+        {
+            try
+            {
+                string threadId = _threadIdByGameIdDictionary[gameId];
+                ISender sender = _senderByThreadIdDictionary[threadId];
                 return true;
             }
             catch

@@ -44,5 +44,25 @@ namespace gRPC.Services
             _logger.LogInformation("End processing Order stream");
             return new OrderReply();
         }
+        public async override Task<NewGameStatus> MigrateGame(GameStatus request, ServerCallContext context)
+        {
+            string gameId = request.GameId;
+            bool isRouted = _router.routeMigrateCommand(request.NewServerId, gameId);
+            return await Task.FromResult(new NewGameStatus
+            {
+                GameStatus = isRouted
+            });
+        }
+
+        public override Task<AcceptStatus> AcceptGame(SerializedGameMessage request, ServerCallContext context)
+        {
+            string serializedGame = request.SerializedGame;
+            bool isRouted = _router.routeAcceptCommand(serializedGame);
+            return Task.FromResult(new AcceptStatus
+            {
+                AcceptStatus_ = isRouted
+            });
+        }
+
     }
 }
