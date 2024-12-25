@@ -30,12 +30,14 @@ namespace gRPC.Router
                 return false;
             }
         }
-         public bool routeAcceptCommand(string serializedGame)
+        public bool routeAcceptCommand(string serializedGame)
         {
             try
             {
                 string threadId = _threadIdByGameIdDictionary.ElementAt(random.Next(0, _threadIdByGameIdDictionary.Count)).Value;
                 ISender sender = _senderByThreadIdDictionary[threadId];
+                ICommand command = new DeserializeCommand(threadId, serializedGame);
+                sender.Send(command);
                 return true;
             }
             catch
@@ -50,6 +52,8 @@ namespace gRPC.Router
             {
                 string threadId = _threadIdByGameIdDictionary[gameId];
                 ISender sender = _senderByThreadIdDictionary[threadId];
+                ICommand command = new SerializeCommand(gameId, serverId);
+                sender.Send(command);
                 return true;
             }
             catch
