@@ -1,7 +1,6 @@
 ﻿namespace gRPC.StartEndPointService;
-using Microsoft.AspNetCore.Builder;
-using ShipGame.Move;
 using gRPC.Services;
+using ShipGame.Move;
 
 public class StartEndPointCommand: ICommand
 {
