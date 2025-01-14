@@ -48,9 +48,9 @@ public class GameSerializerCommand: ICommand
     private string SerializeGameData((List<string> options, Dictionary<string, object> objects, Queue<ICommand> queue, TimeSpan timespan) gameData)
     {
           
-        string serializedOptions = string.Join("", gameData.options.Select(option => IoC.Resolve<string>("SerializeOption", option)));
+        string serializedOptions = string.Join(" ", gameData.options.Select(option => IoC.Resolve<string>("SerializeOption", option)));
         string serializedObjects = string.Join(";", gameData.objects.Select(entry => $"{entry.Key} : {IoC.Resolve<string>("SerializeObject", entry.Value)}"));
-        string serializedCommands = string.Join("", gameData.queue.ToArray().Select(cmd => IoC.Resolve<string>("SerializeCommand", cmd)));
+        string serializedCommands = string.Join(" ", gameData.queue.ToArray().Select(cmd => IoC.Resolve<string>("SerializeCommand", cmd)));
 
         return $"{serializedOptions} | {serializedObjects} | {serializedCommands} | {gameData.timespan}";
      }
