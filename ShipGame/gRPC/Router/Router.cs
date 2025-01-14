@@ -65,12 +65,12 @@ namespace GRpc.Server
             }    
         }
 
-        public bool isAccept(SerializedGameRequest serializedGameRequest)
+        public bool isAccept(string serializedGame)
         {
             try 
             {
                 string threadId = _threadIdByGameIdDictionary.ElementAt(random.Next(0, _threadIdByGameIdDictionary.Count)).Value;
-                var message = new DeserializeGameCommand(threadId, serializedGameRequest.SerializedGame);
+                var message = new DeserializeGameCommand(threadId, serializedGame);
                 var sender = _senderByThreadIdDictionary[threadId];
                 sender.Send(message);
                 return true;

@@ -38,7 +38,7 @@ namespace gRPC.Services
 
         public override Task<AcceptStatusReply> AcceptGame(SerializedGameRequest request, ServerCallContext context)
         {
-            var r = router.isAccept(request);
+            var r = router.isAccept(request.SerializedGame);
             return Task.FromResult(new AcceptStatusReply{AcceptStatus = r});
         }
     }
