@@ -15,7 +15,7 @@ namespace GRpc.Server
         public void Execute()
         {
             ShipGame.Move.ICommand command = IoC.Resolve<ShipGame.Move.ICommand>("messageToICommand", message);
-            var sendCommand = IoC.Resolve<ShipGame.Move.ICommand>("SendCommandToGame", gameId, command);
+            var sendCommand = IoC.Resolve<ShipGame.Move.ICommand>("GameQueueReceiveCommand", gameId, command);
             sendCommand.Execute();
         }
     }

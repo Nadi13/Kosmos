@@ -45,7 +45,7 @@ namespace ShipGame.Server
                 }
                 catch (Exception e)
                 {
-                    var exceptionCommand = IoC.Resolve<ICommand >("HandleException", e, cmd2);
+                    var exceptionCommand = IoC.Resolve<ICommand>("HandleException", e, cmd2);
                     exceptionCommand.Execute();
                 }
             }
