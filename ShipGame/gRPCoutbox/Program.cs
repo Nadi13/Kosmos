@@ -28,9 +28,8 @@ foreach(string mes in messages){
         gRPCMess.Map.Add(propsMap);
         gRPCMess.GameId = propsMap.First().Value;
         var reply = client.Command(gRPCMess);
-        await using (var cmd = new NpgsqlCommand("UPDATE messages SET is_sent=true WHERE \"message\"=(@p)", connection))
+        await using (var cmd = new NpgsqlCommand("UPDATE transaction_messages SET is_sent=true WHERE \"serialized_message\"=(@p)", connection))
         {
-            Console.WriteLine(mes);
             cmd.Parameters.AddWithValue("p", mes);
             await cmd.ExecuteNonQueryAsync();
         }
