@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+option csharp_namespace = "gRPCclient";
+
+package server;
+
+service EndPoint
+{
+  rpc Message(CommandRequest) returns (CommandResponse);
+  rpc Command(ExternalCommandRequest) returns (ExternalCommandReply);
+  rpc MigrateGame (SendGameToAnotherServerRequest) returns (NewGameStatusReply);
+  rpc AcceptGame (SerializedGameRequest) returns (AcceptStatusReply);
+}
+message CommandForObject
+{
+	string Key = 1;
+	string Value = 2;
+}
+
+message CommandRequest
+{
+	string GameId = 1;
+	string CommandType = 2;
+	string GameItemId = 3;
+	repeated CommandForObject Args = 4;
+}
+
+message CommandResponse 
+{
+  int32 status = 1;
+}
+
+message ExternalCommandRequest {
+	string gameId = 1;
+	map<string, string> map = 2;
+}
+
+message ExternalCommandReply {
+	bool status = 1;
+}
+
+message SerializedGameRequest{
+  string serializedGame = 1;
+}
+
+message SendGameToAnotherServerRequest{
+  string gameId = 1;
+  string newServerId = 2;
+}
+
+message AcceptStatusReply{
+  bool acceptStatus = 1;
+}
+
+message NewGameStatusReply{
+  bool gameStatus = 1;
+}
