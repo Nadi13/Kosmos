@@ -19,6 +19,8 @@ namespace Tests.TestServerThread
 
             var threadDict = new ConcurrentDictionary<string, ServerThread>();
             var senderDict = new ConcurrentDictionary<string, ISender>();
+            var externalSenderDict = new ConcurrentDictionary<string, ISender>(); 
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ExternalSenderDictionary", (object[] _) => externalSenderDict ).Execute();
             IoC.Resolve<ICommand>("IoC.Register", "ThreadDictionary", (object[] _) => threadDict).Execute();
             IoC.Resolve<ICommand>("IoC.Register", "SenderDictionary", (object[] _) => senderDict).Execute();
             IoC.Resolve<ICommand>("IoC.Register", "SenderAdapterGetByID", (object[] id) => senderDict[(string)id[0]]).Execute();

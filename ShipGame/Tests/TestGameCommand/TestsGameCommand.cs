@@ -18,7 +18,8 @@ namespace Tests.TestGameCommand
             new InitScopeBasedIoCImplementationCommand().Execute();
             var initialScope = IoC.Resolve<object>("Scopes.New", IoC.Resolve<object>("Scopes.Root"));
             IoC.Resolve<Hwdtech.ICommand>("Scopes.Current.Set", initialScope).Execute();
-
+            var externalSenderDict = new ConcurrentDictionary<string, ISender>(); 
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ExternalSenderDictionary", (object[] _) => externalSenderDict ).Execute();
             var threadDict = new ConcurrentDictionary<string, ServerThread>();
             var senderDict = new ConcurrentDictionary<string, ISender>();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "SenderDictionary", (object[] _) => { return senderDict; }).Execute();
@@ -48,6 +49,7 @@ namespace Tests.TestGameCommand
         [Test]
         public void GameCommandWithoutExceptionSuccessfulTest()
         {
+            
             var senderDict = IoC.Resolve<ConcurrentDictionary<string, ISender>>("SenderDictionary");
             var threadGameDict = IoC.Resolve<ConcurrentDictionary<string, string>>("Storage.ThreadByGameID");
             var scopeGameDict = new ConcurrentDictionary<string, object>();

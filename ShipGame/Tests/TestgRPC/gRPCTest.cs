@@ -11,6 +11,7 @@ using gRPC.Services;
 using gRPC.StartEndPointService;
 using ShipGame.Server;
 using SpaceBattle.ServerStrategies;
+using GRpc.Server;
 
 namespace Tests.TestgRPC
 {
@@ -23,6 +24,8 @@ namespace Tests.TestgRPC
 
             var threadDict = new ConcurrentDictionary<string, ServerThread>();
             var senderDict = new ConcurrentDictionary<string, ISender>();
+            var externalSenderDict = new ConcurrentDictionary<string, ISender>(); 
+            IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ExternalSenderDictionary", (object[] _) => externalSenderDict ).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "ThreadDictionary", (object[] _) => threadDict).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "SenderDictionary", (object[] _) => senderDict).Execute();
             IoC.Resolve<Hwdtech.ICommand>("IoC.Register", "SenderGetByID", (object[] id) => senderDict[(string)id[0]]).Execute();
@@ -70,7 +73,7 @@ namespace Tests.TestgRPC
             var mre1 = new ManualResetEvent(false);
             var sender = IoC.Resolve<ISender>("SenderGetByID", "thread1");
             var endp = IoC.Resolve<ICommand>("CreateEndPoint");
-            var service = new EndPointService(new Mock<ILogger<EndPointService>>().Object);
+            var service = new EndPointService(new Mock<IEndPointRouter>().Object);
             service.Message(request, new Mock<ServerCallContext>().Object);
             IoC.Resolve<ICommand>("SendCommand", sender, new ActionCommand(() => { mre1.Set(); })).Execute();
             mre1.WaitOne();

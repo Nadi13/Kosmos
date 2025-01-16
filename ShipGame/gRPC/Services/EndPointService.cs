@@ -1,4 +1,5 @@
 using Grpc.Core;
+using GRpc.Server;
 using Hwdtech;
 using ICommand = ShipGame.Move.ICommand;
 
@@ -6,10 +7,10 @@ namespace gRPC.Services
 {
     public class EndPointService : EndPoint.EndPointBase
     {
-        private readonly ILogger<EndPointService> _logger;
-        public EndPointService(ILogger<EndPointService> logger)
+        private GRpc.Server.IEndPointRouter router;
+        public EndPointService(GRpc.Server.IEndPointRouter router)
         {
-            _logger = logger;
+            this.router = router;
         }
 
         public override Task<CommandResponse> Message(CommandRequest request, ServerCallContext context)
@@ -22,6 +23,11 @@ namespace gRPC.Services
             {
                 Status = 202
             });
+        }
+        public override Task<ExternalCommandReply> Command(ExternalCommandRequest request, ServerCallContext context)
+        {
+            var r = router.isSent(request);
+            return Task.FromResult(new ExternalCommandReply{Status = r});
         }
     }
 }

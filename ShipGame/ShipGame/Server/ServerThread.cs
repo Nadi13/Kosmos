@@ -9,9 +9,12 @@ namespace ShipGame.Server
         private IReceiver queue;
         private Thread thread;
         private Action strategy;
-        public ServerThread(IReceiver queue)
+        private IReceiver externalQueue;
+        public ServerThread(IReceiver queue, IReceiver externalQueue)
         {
             this.queue = queue;
+            this.externalQueue = externalQueue;
+
             strategy = new Action(() =>
             {
                 HandleCommand();
@@ -34,16 +37,32 @@ namespace ShipGame.Server
         }
         internal void HandleCommand()
         {
-            ICommand cmd = this.queue.Receive();
-            try
-            {
-                cmd.Execute();
+            if (!this.externalQueue.IsEmpty()) {
+                ICommand cmd2 = this.externalQueue.Receive();
+                try
+                {
+                    cmd2?.Execute();
+                }
+                catch (Exception e)
+                {
+                    var exceptionCommand = IoC.Resolve<ICommand>("HandleException", e, cmd2);
+                    exceptionCommand.Execute();
+                }
             }
-            catch (Exception e)
+            if (!this.queue.IsEmpty())
             {
-                var exceptionCommand = IoC.Resolve<ICommand >("HandleException", e, cmd);
-                exceptionCommand.Execute();
+                ICommand cmd = this.queue.Receive();
+                try
+                {
+                    cmd?.Execute();
+                }
+                catch (Exception e)
+                {
+                    var exceptionCommand = IoC.Resolve<ICommand >("HandleException", e, cmd);
+                    exceptionCommand.Execute();
+                }
             }
+            
         }
         public void UpdateBehavior(Action newBeh)
         {
