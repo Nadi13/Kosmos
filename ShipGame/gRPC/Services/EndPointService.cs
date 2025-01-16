@@ -29,5 +29,17 @@ namespace gRPC.Services
             var r = router.isSent(request);
             return Task.FromResult(new ExternalCommandReply{Status = r});
         }
+
+        public override Task<NewGameStatusReply> MigrateGame(SendGameToAnotherServerRequest request, ServerCallContext context)
+        {
+            var r = router.isMigrate(request);
+            return Task.FromResult(new NewGameStatusReply{GameStatus = r});
+        }
+
+        public override Task<AcceptStatusReply> AcceptGame(SerializedGameRequest request, ServerCallContext context)
+        {
+            var r = router.isAccept(request.SerializedGame);
+            return Task.FromResult(new AcceptStatusReply{AcceptStatus = r});
+        }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 using gRPC;
+using gRPC.StartEndPointService;
 using ShipGame.Server;
 
 namespace GRpc.Server
@@ -9,6 +10,7 @@ namespace GRpc.Server
     {
         ConcurrentDictionary<string, string> _threadIdByGameIdDictionary;
         ConcurrentDictionary<string, ISender> _senderByThreadIdDictionary;
+        Random random = new Random();
 
         public RouterMessage(ConcurrentDictionary<string, string> threadIdByGameIdDictionary, ConcurrentDictionary<string, ISender> senderByThreadIdDictionary){
             _threadIdByGameIdDictionary = threadIdByGameIdDictionary;
@@ -43,6 +45,40 @@ namespace GRpc.Server
             }
 
             return dictionary;
+        }
+
+        public bool isMigrate(SendGameToAnotherServerRequest sendGameToAnotherServerRequest)
+        {
+            try 
+            {
+                var gameId = sendGameToAnotherServerRequest.GameId;
+                var serverId = sendGameToAnotherServerRequest.NewServerId;
+                var message = new GameSerializerCommand(gameId, serverId);
+                var threadId = _threadIdByGameIdDictionary[gameId];
+                var sender = _senderByThreadIdDictionary[threadId];
+                sender.Send(message);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }    
+        }
+
+        public bool isAccept(string serializedGame)
+        {
+            try 
+            {
+                string threadId = _threadIdByGameIdDictionary.ElementAt(random.Next(0, _threadIdByGameIdDictionary.Count)).Value;
+                var message = new DeserializeGameCommand(threadId, serializedGame);
+                var sender = _senderByThreadIdDictionary[threadId];
+                sender.Send(message);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }   
         }
     }
 }
